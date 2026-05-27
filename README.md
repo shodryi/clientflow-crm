@@ -1,13 +1,37 @@
 # ClientFlow — Mini CRM para gestión de leads
 
-ClientFlow es una aplicación **full-stack** tipo mini CRM creada para recibir, organizar y administrar leads provenientes de formularios web, landing pages o campañas digitales.
+ClientFlow es una aplicación full-stack tipo mini CRM creada para recibir, organizar y administrar leads provenientes de sitios web, landing pages, campañas digitales o integraciones externas.
 
-El proyecto fue desarrollado como aplicación de portfolio para demostrar conocimientos prácticos en **Node.js**, **Express**, **TypeScript**, **Prisma**, **SQLite**, **JWT**, **Zod**, **React**, **Vite** y consumo de APIs desde un frontend moderno.
+El proyecto fue desarrollado como aplicación de portfolio para demostrar conocimientos prácticos en backend, frontend, autenticación, bases de datos relacionales, deploy, automatización y consumo de APIs desde una interfaz moderna.
 
-> Estado actual: proyecto funcional en entorno local.  
-> Próximo objetivo: migrar la base de datos de SQLite a PostgreSQL, agregar datos demo con reset diario y preparar deploy público.
+## Demo pública
 
----
+- **Frontend:** https://clientflow-crm-roan.vercel.app
+- **Backend API:** https://clientflow-api-n9gh.onrender.com
+- **Health check:** https://clientflow-api-n9gh.onrender.com/health
+
+> Nota: el backend está desplegado en Render Free. Si la API estuvo inactiva durante un tiempo, puede tardar algunos segundos en responder en el primer acceso.
+
+## Usuario demo
+
+```txt
+Email: usuario@test.com
+Password: contra123
+```
+
+## Estado actual
+
+Proyecto funcional y desplegado.
+
+Actualmente incluye:
+
+- Backend deployado en Render.
+- Frontend deployado en Vercel.
+- Base de datos PostgreSQL en Neon.
+- Seed demo con datos ficticios.
+- Reset automático de la base demo cada 4 días usando GitHub Actions.
+- Interfaz responsive conectada al backend.
+- README preparado para portfolio, uso local y deploy.
 
 ## Tabla de contenidos
 
@@ -16,60 +40,61 @@ El proyecto fue desarrollado como aplicación de portfolio para demostrar conoci
 - [Funcionalidades principales](#funcionalidades-principales)
 - [Tecnologías utilizadas](#tecnologías-utilizadas)
 - [Arquitectura general](#arquitectura-general)
-- [Estructura del proyecto](#estructura-del-proyecto)
 - [Modelo de datos](#modelo-de-datos)
 - [Endpoints principales](#endpoints-principales)
 - [Instalación local](#instalación-local)
 - [Variables de entorno](#variables-de-entorno)
-- [Cómo ejecutar el backend](#cómo-ejecutar-el-backend)
-- [Cómo ejecutar el frontend](#cómo-ejecutar-el-frontend)
-- [Usuario demo local](#usuario-demo-local)
+- [Seed de datos demo](#seed-de-datos-demo)
+- [Reset automático de la demo](#reset-automático-de-la-demo)
 - [Scripts disponibles](#scripts-disponibles)
-- [Validaciones y manejo de errores](#validaciones-y-manejo-de-errores)
+- [Validaciones-y-manejo-de-errores](#validaciones-y-manejo-de-errores)
 - [Seguridad](#seguridad)
-- [Capturas sugeridas](#capturas-sugeridas)
-- [Próximos pasos](#próximos-pasos)
+- [Objetivo de portfolio](#objetivo-de-portfolio)
 - [Autor](#autor)
-
----
 
 ## Descripción del proyecto
 
-ClientFlow simula una plataforma CRM sencilla donde una empresa puede recibir consultas desde un formulario público y gestionarlas desde un panel privado.
+ClientFlow simula una plataforma CRM sencilla donde una empresa puede recibir consultas comerciales y gestionarlas desde un panel privado.
 
 El flujo principal de la aplicación es:
 
 ```txt
-Formulario público → API → Base de datos → Panel privado → Gestión comercial
+Formulario web, landing page, campaña o integración externa
+        ↓
+API REST
+        ↓
+Base de datos PostgreSQL
+        ↓
+Panel privado
+        ↓
+Gestión comercial del lead
 ```
+
+En esta demo, el formulario público sirve para simular la recepción de leads desde distintos canales como sitio web, landing pages, anuncios, Instagram o referidos. Para facilitar la prueba del proyecto, el origen del lead puede seleccionarse manualmente desde el formulario.
 
 Desde el panel interno se pueden ver leads, filtrarlos, cambiar su estado, asociarlos a clientes, agregar notas internas y revisar métricas generales en un dashboard.
 
 La aplicación no fue pensada como producto comercial final, sino como un proyecto completo para demostrar habilidades full-stack en un caso de uso realista.
 
----
-
 ## Qué problema resuelve
 
-Muchas empresas reciben consultas desde distintos canales, como sitios web, formularios, campañas o redes sociales. Si esas consultas quedan dispersas, es difícil darles seguimiento.
+Muchas empresas reciben consultas desde distintos canales: sitios web, formularios, campañas, redes sociales o referidos. Si esas consultas quedan dispersas, es difícil darles seguimiento.
 
 ClientFlow centraliza esa información en un flujo simple:
 
-- Una persona completa un formulario público.
-- La consulta se guarda como lead.
-- Un usuario interno inicia sesión en el panel.
-- El lead se puede clasificar por estado.
-- El lead se puede asociar a un cliente.
-- Se pueden agregar notas internas.
-- El dashboard muestra estadísticas generales.
-
----
+1. La empresa recibe un lead desde un formulario web, landing page, campaña publicitaria o integración externa.
+2. La consulta se guarda como lead.
+3. Un usuario interno inicia sesión en el panel.
+4. El lead se puede clasificar por estado.
+5. El lead se puede asociar a un cliente.
+6. Se pueden agregar notas internas.
+7. El dashboard muestra estadísticas generales.
 
 ## Funcionalidades principales
 
 ### Autenticación
 
-- Registro de usuario.
+- Registro de usuario mediante API.
 - Login con email y contraseña.
 - Contraseñas hasheadas con bcryptjs.
 - Autenticación con JWT.
@@ -151,9 +176,9 @@ Perdido
 - Página de detalle de cliente.
 - Formulario público.
 - Diseño responsive.
+- Detección visual de conexión con la API.
+- Mensajes de error en español.
 - Interfaz conectada completamente al backend.
-
----
 
 ## Tecnologías utilizadas
 
@@ -162,8 +187,9 @@ Perdido
 - Node.js
 - Express
 - TypeScript
-- Prisma
-- SQLite
+- Prisma ORM
+- PostgreSQL
+- Neon
 - Zod
 - JWT con jose
 - bcryptjs
@@ -180,129 +206,53 @@ Perdido
 - Fetch API
 - Context API para autenticación
 
-### Herramientas
+### Deploy y herramientas
 
-- npm
-- Prisma Studio
-- PowerShell para pruebas manuales
-- Git / GitHub
-
----
+- Render para backend.
+- Vercel para frontend.
+- Neon para PostgreSQL.
+- GitHub Actions para reset automático de datos demo.
+- Git / GitHub.
+- npm.
+- PowerShell para pruebas manuales.
 
 ## Arquitectura general
 
-El proyecto está organizado como una aplicación full-stack en una misma carpeta raíz:
+El proyecto está organizado como una aplicación full-stack en un mismo repositorio.
 
 ```txt
-clientflow-api/
-  src/        → Backend
-  prisma/     → Schema y migraciones de base de datos
-  web/        → Frontend React + Vite
-```
-
-El backend expone una API REST y el frontend consume esa API usando una variable de entorno:
-
-```env
-VITE_API_URL=http://localhost:3000
+clientflow-crm/
+  src/                 Backend Express + TypeScript
+  prisma/              Schema, migraciones y seed de datos demo
+  web/                 Frontend React + Vite
+  .github/workflows/   Automatización para reset de datos demo
 ```
 
 En desarrollo local:
 
 ```txt
-Backend:  http://localhost:3000
-Frontend: http://localhost:5173
+Frontend React + Vite
+        ↓
+http://localhost:3000
+        ↓
+Backend Express + TypeScript
+        ↓
+PostgreSQL
 ```
 
----
-
-## Estructura del proyecto
+En producción:
 
 ```txt
-clientflow-api/
-  prisma/
-    migrations/
-    schema.prisma
-
-  src/
-    constants/
-      lead-statuses.ts
-
-    controllers/
-      auth.controller.ts
-      client.controller.ts
-      dashboard.controller.ts
-      lead.controller.ts
-      note.controller.ts
-
-    generated/
-      prisma/
-
-    lib/
-      jwt.ts
-      prisma.ts
-
-    middlewares/
-      auth.middleware.ts
-      error.middleware.ts
-      not-found.middleware.ts
-      validate.ts
-
-    routes/
-      auth.routes.ts
-      client.routes.ts
-      dashboard.routes.ts
-      lead.routes.ts
-      note.routes.ts
-
-    schemas/
-      auth.schema.ts
-      client.schema.ts
-      lead.schema.ts
-      note.schema.ts
-
-    services/
-      auth.service.ts
-      client.service.ts
-      dashboard.service.ts
-      lead.service.ts
-      note.service.ts
-
-    types/
-      auth.ts
-      client.ts
-      lead.ts
-      note.ts
-
-    app.ts
-    server.ts
-
-  web/
-    src/
-      components/
-      context/
-      lib/
-      pages/
-      types/
-      App.tsx
-      main.tsx
-      styles.css
-
-    index.html
-    package.json
-    .env.example
-
-  .env.example
-  .gitignore
-  package.json
-  prisma.config.ts
-  tsconfig.json
+Frontend en Vercel
+        ↓
+Backend en Render
+        ↓
+PostgreSQL en Neon
 ```
-
----
 
 ## Modelo de datos
 
-El sistema trabaja con cuatro entidades principales:
+El sistema trabaja con cuatro entidades principales.
 
 ### User
 
@@ -310,29 +260,33 @@ Representa un usuario administrador del CRM.
 
 Campos principales:
 
-- id
-- name
-- email
-- password
-- createdAt
-- updatedAt
+```txt
+id
+name
+email
+password
+createdAt
+updatedAt
+```
 
 ### Lead
 
-Representa una consulta o contacto recibido desde un formulario público.
+Representa una consulta o contacto recibido desde un formulario, campaña o integración externa.
 
 Campos principales:
 
-- id
-- name
-- email
-- phone
-- message
-- source
-- status
-- clientId
-- createdAt
-- updatedAt
+```txt
+id
+name
+email
+phone
+message
+source
+status
+clientId
+createdAt
+updatedAt
+```
 
 ### Client
 
@@ -340,13 +294,15 @@ Representa un cliente o empresa asociada a uno o más leads.
 
 Campos principales:
 
-- id
-- name
-- email
-- phone
-- company
-- createdAt
-- updatedAt
+```txt
+id
+name
+email
+phone
+company
+createdAt
+updatedAt
+```
 
 ### Note
 
@@ -354,30 +310,28 @@ Representa una nota interna asociada a un lead.
 
 Campos principales:
 
-- id
-- content
-- leadId
-- userId
-- createdAt
-- updatedAt
-
----
+```txt
+id
+content
+leadId
+userId
+createdAt
+updatedAt
+```
 
 ## Endpoints principales
 
 ### Health check
 
-```http
+```txt
 GET /health
 ```
 
 Verifica si la API está funcionando.
 
----
-
 ### Auth
 
-```http
+```txt
 POST /auth/register
 POST /auth/login
 GET /auth/me
@@ -385,11 +339,9 @@ GET /auth/me
 
 `GET /auth/me` requiere token JWT.
 
----
-
 ### Leads
 
-```http
+```txt
 GET /leads
 POST /leads/public
 GET /leads/:id
@@ -400,13 +352,13 @@ DELETE /leads/:id
 
 La mayoría de rutas de leads son privadas, excepto:
 
-```http
+```txt
 POST /leads/public
 ```
 
 Ejemplos de filtros:
 
-```http
+```txt
 GET /leads?page=1&limit=5
 GET /leads?status=contacted
 GET /leads?search=landing
@@ -414,11 +366,9 @@ GET /leads?clientId=1
 GET /leads?sortBy=name&sortOrder=asc
 ```
 
----
-
 ### Clientes
 
-```http
+```txt
 GET /clients
 POST /clients
 GET /clients/:id
@@ -428,11 +378,9 @@ DELETE /clients/:id
 
 Todas las rutas de clientes requieren autenticación.
 
----
-
 ### Notas
 
-```http
+```txt
 GET /leads/:id/notes
 POST /leads/:id/notes
 DELETE /notes/:id
@@ -440,17 +388,13 @@ DELETE /notes/:id
 
 Todas las rutas de notas requieren autenticación.
 
----
-
 ### Dashboard
 
-```http
+```txt
 GET /dashboard/stats
 ```
 
 Devuelve métricas generales del CRM. Requiere autenticación.
-
----
 
 ## Instalación local
 
@@ -458,18 +402,32 @@ Devuelve métricas generales del CRM. Requiere autenticación.
 
 Antes de empezar, necesitás tener instalado:
 
-- Node.js
-- npm
-- Git
+- Node.js.
+- npm.
+- Git.
+- Una base PostgreSQL.
+- Opcional: cuenta en Neon para usar PostgreSQL en la nube.
 
 Cloná el repositorio:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-cd clientflow-api
+git clone https://github.com/shodryi/clientflow-crm
+cd clientflow-crm
 ```
 
----
+Instalá dependencias del backend:
+
+```bash
+npm install
+```
+
+Instalá dependencias del frontend:
+
+```bash
+cd web
+npm install
+cd ..
+```
 
 ## Variables de entorno
 
@@ -479,11 +437,19 @@ Creá un archivo `.env` en la raíz del proyecto usando como referencia `.env.ex
 
 ```env
 PORT=3000
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="change-this-secret-key-before-production-123456"
+
+DATABASE_URL="postgresql://PASSWORD@HOST-POOLER.neon.tech/DATABASE?sslmode=require"
+
+DIRECT_DATABASE_URL="postgresql://PASSWORD@HOST.neon.tech/DATABASE?sslmode=require"
+
+JWT_SECRET="change-this-secret-key-with-at-least-32-characters"
 ```
 
-El valor de `JWT_SECRET` debe tener al menos 32 caracteres.
+Notas:
+
+- `DATABASE_URL` se usa para la conexión principal de la aplicación.
+- `DIRECT_DATABASE_URL` se usa para operaciones directas como migraciones o tareas de mantenimiento.
+- `JWT_SECRET` debe tener al menos 32 caracteres.
 
 ### Frontend
 
@@ -493,26 +459,30 @@ Creá un archivo `.env` dentro de `web/` usando como referencia `web/.env.exampl
 VITE_API_URL=http://localhost:3000
 ```
 
----
+Para producción en Vercel, esta variable apunta al backend deployado:
+
+```env
+VITE_API_URL=https://clientflow-api-n9gh.onrender.com
+```
 
 ## Cómo ejecutar el backend
 
 Desde la raíz del proyecto:
 
 ```bash
-npm install
+npx prisma generate
 ```
 
-Aplicá las migraciones de Prisma:
+Aplicá migraciones en una base de desarrollo:
 
 ```bash
 npx prisma migrate dev
 ```
 
-Generá Prisma Client si fuera necesario:
+Cargá datos demo:
 
 ```bash
-npx prisma generate
+npx prisma db seed
 ```
 
 Levantá el servidor:
@@ -533,15 +503,12 @@ Probá el health check:
 http://localhost:3000/health
 ```
 
----
-
 ## Cómo ejecutar el frontend
 
 En otra terminal:
 
 ```bash
 cd web
-npm install
 npm run dev
 ```
 
@@ -551,30 +518,41 @@ El frontend debería quedar disponible en:
 http://localhost:5173
 ```
 
----
+## Seed de datos demo
 
-## Usuario demo local
+El proyecto incluye un archivo de seed en:
 
-Como la base de datos local no se sube al repositorio, después de ejecutar las migraciones necesitás crear un usuario.
+```txt
+prisma/seed.ts
+```
 
-Podés hacerlo desde el frontend en caso de tener una pantalla de registro, o desde PowerShell con la API:
+Este seed crea datos ficticios para probar la aplicación:
 
-```powershell
-Invoke-RestMethod `
-  -Method Post `
-  -Uri "http://localhost:3000/auth/register" `
-  -ContentType "application/json" `
-  -Body '{"name":"Usuario Demo","email":"usuario@test.com","password":"contra123"}'
+- Usuario demo.
+- Clientes.
+- Leads.
+- Notas.
+- Relaciones entre leads y clientes.
+- Fechas distribuidas para que el dashboard se vea más realista.
+
+Ejecutá la seed con:
+
+```bash
+npx prisma db seed
 ```
 
 Luego podés iniciar sesión con:
 
 ```txt
-usuario@test.com
-contra123
+Email: usuario@test.com
+Password: contra123
 ```
 
----
+## Reset automático de la demo
+
+La demo pública usa una base de datos PostgreSQL en Neon.
+
+Este proyecto incluye un workflow de GitHub Actions que resetea los datos demo automáticamente cada 4 días.
 
 ## Scripts disponibles
 
@@ -586,12 +564,6 @@ Desde la raíz del proyecto:
 npm run dev
 ```
 
-Levanta el backend en modo desarrollo.
-
-```bash
-npm run build
-```
-
 Compila TypeScript a JavaScript en `dist/`.
 
 ```bash
@@ -599,6 +571,32 @@ npm run start
 ```
 
 Ejecuta la versión compilada.
+
+### Prisma
+
+```bash
+npx prisma generate
+```
+
+Genera Prisma Client.
+
+```bash
+npx prisma migrate dev
+```
+
+Crea o aplica migraciones en desarrollo.
+
+```bash
+npx prisma migrate deploy
+```
+
+Aplica migraciones pendientes en producción o deploy.
+
+```bash
+npx prisma db seed
+```
+
+Ejecutar la seed demo.
 
 ### Frontend
 
@@ -621,8 +619,6 @@ npm run preview
 ```
 
 Previsualiza la build de producción localmente.
-
----
 
 ## Validaciones y manejo de errores
 
@@ -650,8 +646,6 @@ El frontend muestra errores en español y detecta casos como:
 - Validaciones fallidas.
 - Recursos no encontrados.
 
----
-
 ## Seguridad
 
 El proyecto incluye las siguientes medidas de seguridad:
@@ -660,57 +654,10 @@ El proyecto incluye las siguientes medidas de seguridad:
 - JWT para rutas privadas.
 - Middleware de autenticación.
 - Variables sensibles fuera del repositorio.
-- `.env.example` para documentar configuración.
+- `.env.example` para documentar configuración sin exponer secretos reales.
 - Validaciones centralizadas con Zod.
 - Manejo controlado de errores.
 - Separación entre rutas públicas y privadas.
-
----
-
-## Capturas sugeridas
-
-Cuando el proyecto esté subido a GitHub, se recomienda agregar capturas en una carpeta:
-
-```txt
-docs/screenshots/
-```
-
-Capturas sugeridas:
-
-```txt
-docs/screenshots/login.png
-docs/screenshots/dashboard.png
-docs/screenshots/leads.png
-docs/screenshots/lead-detail.png
-docs/screenshots/clients.png
-docs/screenshots/client-detail.png
-docs/screenshots/public-form.png
-```
-
-Y luego agregarlas al README:
-
-```md
-![Dashboard](docs/screenshots/dashboard.png)
-![Leads](docs/screenshots/leads.png)
-![Formulario público](docs/screenshots/public-form.png)
-```
-
----
-
-## Próximos pasos
-
-El proyecto ya funciona localmente. Los próximos pasos planificados son:
-
-- Migrar SQLite a PostgreSQL.
-- Crear datos demo con seed.
-- Crear reset automático diario de la base demo.
-- Preparar deploy del backend.
-- Preparar deploy del frontend.
-- Agregar URL pública al README.
-- Agregar capturas reales del proyecto.
-- Mejorar documentación de endpoints.
-
----
 
 ## Objetivo de portfolio
 
@@ -723,7 +670,10 @@ Este proyecto demuestra:
 - Hash de contraseñas.
 - Uso de ORM con Prisma.
 - Modelado de datos relacionales.
+- Uso de PostgreSQL en la nube con Neon.
 - Migraciones de base de datos.
+- Seed de datos demo.
+- Uso de GitHub Actions.
 - Manejo de errores centralizado.
 - Frontend con React, Vite y TypeScript.
 - Consumo de API desde frontend.
@@ -731,12 +681,12 @@ Este proyecto demuestra:
 - Formularios controlados.
 - Estado global de autenticación.
 - Diseño responsive.
+- Deploy de backend en Render.
+- Deploy de frontend en Vercel.
 - Organización de proyecto full-stack.
-
----
 
 ## Autor
 
 Desarrollado por **Rodrigo Sanchez**.
 
-Proyecto creado como parte de portfolio personal para demostrar habilidades full-stack orientadas a desarrollo web, APIs, bases de datos, autenticación y frontend moderno.
+Proyecto creado como parte de portfolio personal para demostrar habilidades full-stack orientadas a desarrollo web, APIs, bases de datos, autenticación, deploy y frontend moderno.
