@@ -1,0 +1,83 @@
+// Genera el Prisma Client dentro de src/generated/prisma.
+// Lo ponemos dentro de src para que TypeScript lo pueda compilar sin problemas.
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// En Prisma 7, acá solo va el provider.
+// La URL de conexión está en prisma.config.ts.
+datasource db {
+  provider = "sqlite"
+}
+
+// Usuario administrador.
+// Lo vamos a usar más adelante en Fase 6 para autenticación.
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  notes     Note[]
+}
+
+// Cliente o empresa asociada a oportunidades comerciales.
+// Lo vamos a usar más adelante en Fase 7.
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?
+  phone     String?
+  company   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads     Lead[]
+}
+
+// Lead recibido desde una web o landing page.
+// Este es el modelo principal que vamos a conectar ahora.
+model Lead {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  source    String     @default("website")
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  clientId  Int?
+  client    Client?    @relation(fields: [clientId], references: [id])
+
+  notes     Note[]
+}
+
+// Nota interna sobre un lead.
+// Lo vamos a usar más adelante en Fase 7.
+model Note {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id])
+
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+// Enum de estados posibles para un lead.
+// Es parecido a nuestro LeadStatus de TypeScript, pero ahora existe en la base.
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  CLOSED
+  LOST
+}
