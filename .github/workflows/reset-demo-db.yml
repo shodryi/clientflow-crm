@@ -1,0 +1,36 @@
+name: Reset demo database
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # Ejecuta el reset a las 06:00 UTC cada 4 días del calendario.
+    - cron: "0 6 */4 * *"
+
+jobs:
+  reset-demo-db:
+    name: Reset Neon demo database
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+      DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Reset demo data
+        run: npx prisma db seed
