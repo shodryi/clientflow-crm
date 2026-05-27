@@ -15,8 +15,8 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
 
-  // En Prisma 7, la URL de conexión va acá.
+  // Prisma CLI usa la conexión directa para migraciones.
   datasource: {
-    url: env("DATABASE_URL"),
+    url: env("DIRECT_DATABASE_URL"),
   },
 });

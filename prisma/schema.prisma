@@ -8,7 +8,7 @@ generator client {
 // En Prisma 7, acá solo va el provider.
 // La URL de conexión está en prisma.config.ts.
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 // Usuario administrador.
